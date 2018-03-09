@@ -27,7 +27,7 @@ export class ResolveService {
     let minimaxValue: number = null;
     let minValue: number = null;
 
-    for (let i = 0, matrixLength = data.length; i < matrixLength; i++) {
+    for (let i = 0; i < data.length; i++) {
       minValue = Math.min(...data[i]);
       if (minValue > minimaxValue) {
         arrayNumber = i;
@@ -41,7 +41,8 @@ export class ResolveService {
     let arrayNumber: number = null;
     let value: number = null;
     let tmpValue: number = null;
-    for (let i = 0, matrixLength = data.length; i < matrixLength; i++) {
+
+    for (let i = 0; i < data.length; i++) {
       tmpValue = (Math.min(...data[i]) * carefullLvl) + (Math.max(...data[i]) * (1 - carefullLvl));
       if (tmpValue > value) {
         arrayNumber = i;
@@ -55,8 +56,9 @@ export class ResolveService {
     let arrayNumber: number = null;
     let value: number = null;
     let tmpValue: number = null;
-    for (let i = 0, matrixLength = data.length; i < matrixLength; i++) {
-      for (let j = 0, arrayLength = data[i].length; j < arrayLength; j++) {
+    
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < data[i].length; j++) {
         tmpValue = tmpValue + data[i][j] * (1 / (j + 2));
       }
       if (tmpValue > value) {
