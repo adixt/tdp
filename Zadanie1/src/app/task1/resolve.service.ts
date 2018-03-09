@@ -1,5 +1,10 @@
 import {Injectable} from "@angular/core";
 
+export interface IResult {
+  arrayNumber: number;
+  value: number;
+}
+
 @Injectable()
 export class ResolveService {
   public static kryteriumOptymistyczne(data: number[][]): number {
@@ -64,39 +69,40 @@ export class ResolveService {
   }
 
   public static kryteriumSavagea(data: number[][]): number {
-    let result = null,
-      maxFromArray = Object.assign([], data[0]),
-      resultArray = new Array(data.length);
-    let ResultConstructor = function () {
-      this.arrayNumber = null;
-      this.value = null;
-    };
+    let result: IResult = null;
+    let maxFromColumnArray: number[] = Object.assign([], data[0]);
+    let resultArray: IResult[] = [];
 
-    // cuz fill() method make copy of obj :C
-    // resultArray.fill(new ResultConstructor());
-    for (let i = 0, length = resultArray.length; i < length; i++) {
-      resultArray[i] = new ResultConstructor();
+    // init empty structure for answers
+    for (let i = 0; i < data.length; i++) {
+      resultArray[i] = {arrayNumber: null, value: null};
     }
 
-
-    // finding the max value from col
-    for (let i = 0, matrixLength = data.length; i < matrixLength; i++) {
-      for (let j = 0, arrayLength = data[i].length; j < arrayLength; j++) {
-        maxFromArray[j] = maxFromArray[j] < data[i][j] ? data[i][j] : maxFromArray[j];
+    // finding the max value from each column
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < data[i].length; j++) {
+        maxFromColumnArray[j] = maxFromColumnArray[j] < data[i][j] ? data[i][j] : maxFromColumnArray[j];
       }
     }
+
     // finding the resultArray
-    for (let i = 0, matrixLength = data.length; i < matrixLength; i++) {
-      for (let j = 0, arrayLength = data[i].length; j < arrayLength; j++) {
-        if (resultArray[i].value < maxFromArray[j] - data[i][j]) {
-          resultArray[i].value = maxFromArray[j] - data[i][j];
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < data[i].length; j++) {
+        if (resultArray[i].value < maxFromColumnArray[j] - data[i][j]) {
+          resultArray[i].value = maxFromColumnArray[j] - data[i][j];
           resultArray[i].arrayNumber = i;
         }
       }
     }
-    // searching for the answer!
-    for (let i = 0, arrayLength = resultArray.length; i < arrayLength; i++) {
-      result = resultArray[i].value > result ? resultArray[i] : result;
+
+    // searching for the min in resultArray
+    for (let i = 0; i < resultArray.length; i++) {
+      if (!result) {
+        result = resultArray[i];
+        continue;
+      }
+
+      result = resultArray[i].value < result.value ? resultArray[i] : result;
     }
     return result.arrayNumber;
   }
