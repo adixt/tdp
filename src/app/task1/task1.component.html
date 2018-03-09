@@ -1,0 +1,62 @@
+<button mat-icon-button color="primary" (click)="toggleDataVisible()">
+  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+  Pokaż/ukryj dane wejściowe
+</button>
+<div *ngIf="isDataVisible">
+  <input type="file" (change)="changeListener($event)"/>
+  <br>
+  <table class="table">
+
+    <thead>
+    <tr>
+      <th scope="col">$$$</th>
+      <ng-container *ngFor="let numberIndex of data[0]; let i = index">
+        <th scope="col">{{i+1}}</th>
+      </ng-container>
+    </tr>
+    </thead>
+
+    <tbody>
+    <ng-container *ngFor="let array of data; let i = index">
+      <tr>
+        <td>{{cases[i]}}.000 PLN</td>
+        <ng-container *ngFor="let number of array">
+          <td>{{number}}</td>
+        </ng-container>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
+<h2>Rozwiązania zadania:</h2>
+<div class="row">
+  <div class="col-12 col-sm-6">
+    <ul>
+      <li>
+        <button mat-raised-button (click)="optimisticResolve()">Optymistyczne</button>
+      </li>
+      <li>
+        <button mat-raised-button color="primary" (click)="waldsResolve()">Walda</button>
+      </li>
+      <li>
+        <button mat-raised-button color="accent" (click)="hurvicResolve()">Hurwicza</button>
+        <input *ngIf="isCarefullLvlVisible"
+               [(ngModel)]="carefullLvl"
+               (change)="carefullLvlChanged($event)"
+               type="number"
+               min="0.01" max="0.99" step="0.01" >
+
+      </li>
+      <li>
+        <button mat-raised-button color="warn" (click)="laplacesResolve()">Laplace’a</button>
+      </li>
+      <li>
+        <button mat-raised-button (click)="savagesResolve()">Savage'a</button>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="isAnswerVisible" id="answerDiv" class="col-12 col-sm-6">
+    {{getAnswer}}
+  </div>
+</div>
+

@@ -1,0 +1,8 @@
+li > button {
+  margin: 10px;
+}
+
+#answerDiv{
+  display: flex;
+  align-items: center;
+}
