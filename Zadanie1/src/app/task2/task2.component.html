@@ -1,0 +1,24 @@
+<p>
+  task2 works!
+</p>
+<table class="table table-striped">
+  <tbody>
+  <ng-container *ngFor="let array of data; let i = index">
+    <tr>
+      <ng-container *ngFor="let number of array">
+        <td>{{number}}</td>
+      </ng-container>
+    </tr>
+  </ng-container>
+  </tbody>
+</table>
+<div class="row">
+  <div class="col-12 col-sm-6">
+    <button mat-raised-button color="primary"
+            (click)="resolve()">Resolve</button>
+  </div>
+  <div *ngIf="isAnswerVisible" id="answerDiv"
+       class="col-12 col-sm-6">
+    {{getAnswer}}
+  </div>
+</div>
