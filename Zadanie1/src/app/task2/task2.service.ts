@@ -211,7 +211,6 @@ export class Task2Service {
 
     // console.log(constraintsArray);
     // console.log(objective);
-    debugger;
     let input = {
       type: "maximize",
       objective: objective,
@@ -279,7 +278,7 @@ export class Task2Service {
 
     // console.log(constraintsArray2);
     // console.log(objective2);
-    debugger;
+
     let input2 = {
       type: "minimize",
       objective: objective2,
@@ -287,7 +286,6 @@ export class Task2Service {
     };
 
     let output2 = YASMIJ.solve(input2);
-    alert(output2);
     // console.log(JSON.stringify(output2, null, 2));
     // console.log(output2);
     // console.log(varsInResp2);
@@ -298,7 +296,6 @@ export class Task2Service {
     }
 
     // console.log(1 / tmp);
-    debugger;
     let v2 = (Math.round((1 / tmp) * 100)) / 100;
     // console.log('v2 ' + v2);
 
