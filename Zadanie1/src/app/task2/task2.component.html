@@ -17,8 +17,12 @@
     <button mat-raised-button color="primary"
             (click)="resolve()">Resolve</button>
   </div>
-  <div *ngIf="isAnswerVisible" id="answerDiv"
+  <div *ngIf="true" id="answerDiv"
        class="col-12 col-sm-6">
-    {{getAnswer}}
+    PLAYER A: {{answerA}} <br>
+    Win Size: {{winSizeA}}<br><br>
+
+    PLAYER B: {{answerB}}<br>
+    Win Size: {{winSizeB}}
   </div>
 </div>

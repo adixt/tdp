@@ -1,33 +1,27 @@
 import {Injectable} from '@angular/core';
-import {forEach} from '@angular/router/src/utils/collection';
-import {Task} from 'protractor/built/taskScheduler';
-require('yasmij');
-
-declare var YASMIJ: any;
+import * as YASMIJ from 'yasmij';
 
 @Injectable()
 export class Task2Service {
-  // private data: Array<number[]> = [
-  //   [-4, 6, 6],
-  //   [8, 3, 3],
-  //   [-5, 4, 5]
-  // ];
+  private data: Array<number[]> = [
+    [-4, 6, 6],
+    [8, 3, 3],
+    [-5, 4, 5]
+  ];
 
   // private data: Array<number[]> = [
-  //   [1, 2, 2],
-  //   [1, 1, 2],
-  //   [1, 1, 1],
-  //   [2, 1, 0]
+  //   [2, -3],
+  //   [0, 3]
   // ];
 
   private modulo = 0;
 
-  private data: Array<number[]> = [
-    [1, 1, 1, 2, 2],
-    [2, 1, 1, 1, 2],
-    [2, 2, 1, 1, 1],
-    [2, 2, 2, 1, 0]
-  ];
+  // private data: Array<number[]> = [
+  //   [1, 1, 1, 2, 2],
+  //   [2, 1, 1, 1, 2],
+  //   [2, 2, 1, 1, 1],
+  //   [2, 2, 2, 1, 0]
+  // ];
 
   public get getData(): Array<number[]> {
     return this.data;
@@ -38,6 +32,11 @@ export class Task2Service {
       this.data = data;
     }
   }
+
+  public answerA = {};
+  public answerB = {};
+  public winSizeA: number;
+  public winSizeB: number;
 
   constructor() {
   }
@@ -114,7 +113,7 @@ export class Task2Service {
     return data;
   }
 
-  private static isSaddlePoint(data: Array<number[]>): boolean {
+  private static isSaddlePoint(data: Array<number[]>) {
     let minArray = [],
       maxArray = [];
 
@@ -138,7 +137,7 @@ export class Task2Service {
 
     let minMax = Math.min(...maxArray);
 
-    return maxMin === minMax;
+    return {isSaddlePoint: maxMin === minMax, minMax: minMax};
   }
 
   private static findSmallestValueInData(data: Array<number[]>): number {
@@ -166,21 +165,156 @@ export class Task2Service {
     return {data: data, moduloAdded: minValueInData};
   }
 
+  private static calculateResponseForPlayerB(data: Array<number[]>, modulo: number) {
+    let constraintsArray = [];
+    let objective = "";
+    let varsInResp = [];
+    for (let i = 0; i < data.length; i++) {
+      let constraint = "";
+      for (let j = 0; j < data[i].length; j++) {
+        if (data[i][j] !== 0) {
+          if (j === data[i].length - 1) {
+            constraint = constraint + data[i][j] + "x" + (j + 1);
+          } else {
+            constraint = constraint + data[i][j] + "x" + (j + 1) + " + ";
+          }
+        }
+      }
+      if (constraint[constraint.length - 2] === '+') {
+        constraint = constraint.slice(0, -2);
+      }
+      constraint = constraint + " <= 1";
+      // console.log(constraint);
+      constraintsArray.push(constraint);
+      varsInResp.push("x" + (i + 1));
+      if (i === 0) {
+        objective = objective + "x1";
+      } else {
+        objective = objective + " + " + "x" + (i + 1);
+      }
+    }
+    // console.log(constraintsArray);
+    // console.log(objective);
+
+    let input = {
+      type: "maximize",
+      objective: objective,
+      constraints: constraintsArray
+    };
+
+    let output = YASMIJ.solve(input);
+    // console.log('output' + JSON.stringify(output, null, 2));
+    // console.log('output' + output);
+    // console.log('varsInResp' + varsInResp);
+    let tmp = 0;
+    for (let x of varsInResp) {
+      // console.log('res:' + output.result[x]);
+      tmp += output.result[x] ? output.result[x] : 0;
+    }
+    // console.log('vraw' + 1 / tmp);
+    let v = (Math.round((1 / tmp) * 100)) / 100;
+    // console.log('vv:' + v);
+
+
+    for (let x of varsInResp) {
+      output.result[x] = output.result[x] * v;
+      // console.log(output.result[x]);
+    }
+    // console.log(output.result);
+    let playerB = output.result;
+    let playerBV = v - modulo;
+
+    return {answer: playerB, winSize: playerBV};
+  }
+
+  private static calculateResponseForPlayerA(data: Array<number[]>, modulo: number) {
+    let constraintsArray2 = [];
+    let objective2 = "";
+    let varsInResp2 = [];
+    let tmpConstaraint2 = "";
+    for (let i = 0, length = data[0].length; i < length; i++) {
+      for (let j = 0, lengthInner = data.length; j < lengthInner; j++) {
+        if (data[j][i] !== 0) {
+          if (j === 0) {
+            tmpConstaraint2 = tmpConstaraint2 + data[j][i] + "x1" + " + ";
+          } else {
+            if (j === lengthInner - 1) {
+              tmpConstaraint2 = tmpConstaraint2 + data[j][i] + "x" + (j + 1);
+            } else {
+              tmpConstaraint2 = tmpConstaraint2 + data[j][i] + "x" + (j + 1) + " + ";
+            }
+          }
+        }
+      }
+      if (tmpConstaraint2[tmpConstaraint2.length - 2] === '+') {
+        tmpConstaraint2 = tmpConstaraint2.slice(0, -2);
+      }
+      tmpConstaraint2 = tmpConstaraint2 + " <= 1";
+      // console.log(tmpConstaraint2);
+      constraintsArray2.push(tmpConstaraint2);
+      tmpConstaraint2 = "";
+      varsInResp2.push("x" + (i + 1));
+      if (i === 0) {
+        objective2 = objective2 + "x1";
+      } else {
+        objective2 = objective2 + " + " + "x" + (i + 1);
+      }
+    }
+    // console.log(constraintsArray2);
+    // console.log(objective2);
+
+    let input2 = {
+      type: "minimize",
+      objective: objective2,
+      constraints: constraintsArray2
+    };
+
+    let output2 = YASMIJ.solve(input2);
+    // console.log(JSON.stringify(output2, null, 2));
+    // console.log(output2);
+    // console.log(varsInResp2);
+    let tmp = 0;
+    for (let x of varsInResp2) {
+      // console.log('res2' + output2.result[x]);
+      tmp += output2.result[x] ? output2.result[x] : 0;
+    }
+
+    // console.log(1 / tmp);
+    debugger;
+    let v2 = (Math.round((1 / tmp) * 100)) / 100;
+    // console.log('v2 ' + v2);
+
+
+    for (let x of varsInResp2) {
+      output2.result[x] = output2.result[x] * v2;
+      // console.log(output2.result[x]);
+    }
+
+    return {answer: output2.result, winSize: v2 - modulo};
+  }
+
 
   public resolve(data: Array<number[]>) {
-    let isSaddlePoint = Task2Service.isSaddlePoint(data);
-    if (!isSaddlePoint) {
-      data = Task2Service.reduceMatrix(data);
-      let dataWithModulo: { data: Array<number[]>, moduloAdded: number } = Task2Service.addModuloOfSmallestValueIfSmallerThanZero(data);
-      this.setData = dataWithModulo.data;
-      this.modulo = dataWithModulo.moduloAdded;
-      let input = {
-        type: "maximize",
-        objective: "",
-        constraints: []
-      };
+    let saddleResult = Task2Service.isSaddlePoint(data);
+    if (!saddleResult.isSaddlePoint) {
 
-      let output = YASMIJ.solve(input);
+      let dataReducedWithModulo = Task2Service.addModuloOfSmallestValueIfSmallerThanZero(data);
+      this.setData = dataReducedWithModulo.data;
+      this.modulo = dataReducedWithModulo.moduloAdded;
+      this.setData = Task2Service.reduceMatrix(this.getData);
+
+
+      let responseB = Task2Service.calculateResponseForPlayerB(this.getData, this.modulo);
+      let responseA = Task2Service.calculateResponseForPlayerA(this.getData, this.modulo);
+      this.answerB = responseB.answer;
+      this.winSizeB = responseB.winSize;
+      this.answerA = responseA.answer;
+      this.winSizeA = responseA.winSize;
+    }    else {
+      this.answerB = 'SADDLE POINT!';
+      this.winSizeB = saddleResult.minMax;
+      this.answerA = 'SADDLE POINT!';
+      this.winSizeA = saddleResult.minMax;
     }
   }
 

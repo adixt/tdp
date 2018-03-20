@@ -6,9 +6,25 @@ import {Task2Service} from './task2.service';
   templateUrl: './task2.component.html',
   styleUrls: ['./task2.component.css']
 })
-export class Task2Component implements OnInit {
+export class Task2Component {
   public get data(): Array<number[]> {
     return this.task2Service.getData;
+  }
+
+  public get answerA() {
+    return JSON.stringify(this.task2Service.answerA);
+  }
+
+  public get answerB() {
+    return JSON.stringify(this.task2Service.answerB);
+  }
+
+  public get winSizeA() {
+    return this.task2Service.winSizeA;
+  }
+
+  public get winSizeB() {
+    return this.task2Service.winSizeB;
   }
 
   constructor(private task2Service: Task2Service) {
@@ -16,9 +32,6 @@ export class Task2Component implements OnInit {
 
   public resolve() {
     this.task2Service.resolve(this.data);
-  }
-
-  ngOnInit() {
   }
 
 }
