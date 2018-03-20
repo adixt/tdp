@@ -4,7 +4,6 @@ import {Task1Component} from "./task1.component";
 import {MatButtonModule, MatDialogModule, MatIconModule, MatTableModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {Task1Service} from "./task1.service";
-import {CsvService} from "./csv.service";
 import {FormsModule} from "@angular/forms";
 
 @NgModule({
@@ -19,7 +18,7 @@ import {FormsModule} from "@angular/forms";
   ],
   declarations: [
     Task1Component],
-  providers: [Task1Service, CsvService],
+  providers: [Task1Service],
   exports: [Task1Component]
 })
 export class Task1Module {

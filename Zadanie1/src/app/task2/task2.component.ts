@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Task2Service} from './task2.service';
 import {IInvestingCasesWithValues} from '../task1/task1.models';
-import {Csv2Service} from './csv2.service';
+import {CsvService} from '../csv.service';
 
 @Component({
   selector: 'app-task2',
@@ -31,7 +31,7 @@ export class Task2Component {
     return this.task2Service.winSizeB;
   }
 
-  constructor(private task2Service: Task2Service, private csv2Service: Csv2Service) {
+  constructor(private task2Service: Task2Service, private csvService: CsvService) {
   }
 
   public changeListener(event) {
@@ -42,7 +42,7 @@ export class Task2Component {
 
     reader.onload = (e: any) => {
       let content: string = e.target.result;
-      let data = this.csv2Service.parseOpenedCsvFile(content);
+      let data = this.csvService.parseOpenedCsvFile(content);
       this.task2Service.setData = data;
       this.myInputVariable.nativeElement.value = "";
 

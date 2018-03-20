@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {MatDialog} from "@angular/material";
 import {Task1Service} from "./task1.service";
 import {AlgorithmEnums, IInvestingCasesWithValues} from "./task1.models";
-import {CsvService} from "./csv.service";
+import {CsvService} from "../csv.service";
 import {ResolveService} from "./resolve.service";
 
 @Component({
@@ -88,7 +88,7 @@ export class Task1Component {
 
     reader.onload = (e: any) => {
       let content: string = e.target.result;
-      let result: IInvestingCasesWithValues = this.csvService.parseOpenedCsvFile(content);
+      let result: IInvestingCasesWithValues = this.csvService.getInvestingCasesFromCSV(content);
       this.task1Service.setData = result.data;
       this.task1Service.setCases = result.cases;
     };
