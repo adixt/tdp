@@ -17,6 +17,9 @@
     <button mat-raised-button color="primary"
             (click)="resolve()">Resolve</button>
   </div>
+
+  <input #myInput type="file" (change)="changeListener($event)"/>
+
   <div *ngIf="true" id="answerDiv"
        class="col-12 col-sm-6">
     PLAYER A: {{answerA}} <br>

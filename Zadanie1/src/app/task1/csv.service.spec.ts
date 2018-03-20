@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { CsvService } from './csv.service';
 
-describe('CsvService', () => {
+describe('Csv2Service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [CsvService]
