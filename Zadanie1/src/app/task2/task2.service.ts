@@ -3,16 +3,17 @@ import * as YASMIJ from 'yasmij';
 
 @Injectable()
 export class Task2Service {
-  private data: Array<number[]> = [
-    [-4, 6, 6],
-    [8, 3, 3],
-    [-5, 4, 5]
-  ];
-
   // private data: Array<number[]> = [
-  //   [2, -3],
-  //   [0, 3]
+  //   [-4, 6, 6],
+  //   [8, 3, 3],
+  //   [-5, 4, 5]
   // ];
+
+  private data: Array<number[]> = [
+    [1, 13],
+    [11, 8],
+    [11, 8]
+  ];
 
   private modulo = 0;
 
@@ -167,8 +168,7 @@ export class Task2Service {
 
   private static calculateResponseForPlayerB(data: Array<number[]>, modulo: number) {
     let constraintsArray = [];
-    let objective = "";
-    let varsInResp = [];
+
     for (let i = 0; i < data.length; i++) {
       let constraint = "";
       for (let j = 0; j < data[i].length; j++) {
@@ -186,13 +186,15 @@ export class Task2Service {
       constraint = constraint + " <= 1";
       // console.log(constraint);
       constraintsArray.push(constraint);
-      varsInResp.push("x" + (i + 1));
-      if (i === 0) {
-        objective = objective + "x1";
-      } else {
-        objective = objective + " + " + "x" + (i + 1);
-      }
     }
+
+    let objective = null;
+    let varsInResp = [];
+    for (let i = 0; i < data[0].length; i++) {
+      varsInResp.push("x" + (i + 1));
+      objective = objective ? objective + " + " + "x" + (i + 1) : "x1";
+    }
+
     // console.log(constraintsArray);
     // console.log(objective);
 
@@ -229,10 +231,9 @@ export class Task2Service {
 
   private static calculateResponseForPlayerA(data: Array<number[]>, modulo: number) {
     let constraintsArray2 = [];
-    let objective2 = "";
-    let varsInResp2 = [];
-    let tmpConstaraint2 = "";
+
     for (let i = 0, length = data[0].length; i < length; i++) {
+      let tmpConstaraint2 = "";
       for (let j = 0, lengthInner = data.length; j < lengthInner; j++) {
         if (data[j][i] !== 0) {
           if (j === 0) {
@@ -246,26 +247,28 @@ export class Task2Service {
           }
         }
       }
+
       if (tmpConstaraint2[tmpConstaraint2.length - 2] === '+') {
         tmpConstaraint2 = tmpConstaraint2.slice(0, -2);
       }
       tmpConstaraint2 = tmpConstaraint2 + " <= 1";
       // console.log(tmpConstaraint2);
       constraintsArray2.push(tmpConstaraint2);
-      tmpConstaraint2 = "";
-      varsInResp2.push("x" + (i + 1));
-      if (i === 0) {
-        objective2 = objective2 + "x1";
-      } else {
-        objective2 = objective2 + " + " + "x" + (i + 1);
-      }
     }
+
+    let varsInResp2 = [];
+    let objective2 = null;
+    for (let i = 0, lengthInner = data.length; i < lengthInner; i++) {
+      varsInResp2.push("x" + (i + 1));
+      objective2 = objective2 ? objective2 + " + " + "x" + (i + 1) : "x1";
+    }
+
     // console.log(constraintsArray2);
     // console.log(objective2);
 
     let input2 = {
       type: "minimize",
-      objective: objective2,
+      objective: "x1 + x2",
       constraints: constraintsArray2
     };
 
@@ -310,7 +313,7 @@ export class Task2Service {
       this.winSizeB = responseB.winSize;
       this.answerA = responseA.answer;
       this.winSizeA = responseA.winSize;
-    }    else {
+    } else {
       this.answerB = 'SADDLE POINT!';
       this.winSizeB = saddleResult.minMax;
       this.answerA = 'SADDLE POINT!';
