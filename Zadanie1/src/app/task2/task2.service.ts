@@ -10,14 +10,28 @@ export class Task2Service {
   // ];
 
   private data: Array<number[]> = [
-    [1, 13],
-    [11, 8],
-    [11, 8]
+    [0.2 , 0.3, 0.3],
+    [0.5, 0.1, 0],
+    [0.1, 0.2, 0.3]
   ];
+
+
+  // private data: Array<number[]> = [
+  //   [-1, 7],
+  //   [435, 5],
+  //   [5, 9]
+  // ];
+
+
+  // private data: Array<number[]> = [
+  //   [1, 3, 5, 8],
+  //   [-2, 4, 3, 5],
+  //     [7, -1, 1, 0]
+  // ];
 
   private modulo = 0;
 
-  // private data: Array<number[]> = [
+  //  private data: Array<number[]> = [
   //   [1, 1, 1, 2, 2],
   //   [2, 1, 1, 1, 2],
   //   [2, 2, 1, 1, 1],
@@ -174,9 +188,9 @@ export class Task2Service {
       for (let j = 0; j < data[i].length; j++) {
         if (data[i][j] !== 0) {
           if (j === data[i].length - 1) {
-            constraint = constraint + data[i][j] + "x" + (j + 1);
+            constraint = constraint + data[i][j] + "y" + (j + 1);
           } else {
-            constraint = constraint + data[i][j] + "x" + (j + 1) + " + ";
+            constraint = constraint + data[i][j] + "y" + (j + 1) + " + ";
           }
         }
       }
@@ -190,14 +204,14 @@ export class Task2Service {
 
     let objective = null;
     let varsInResp = [];
-    for (let i = 0; i < data[0].length; i++) {
-      varsInResp.push("x" + (i + 1));
-      objective = objective ? objective + " + " + "x" + (i + 1) : "x1";
+    for (let i = 0; i < data.length; i++) {
+      varsInResp.push("y" + (i + 1));
+      objective = objective ? objective + " + " + "y" + (i + 1) : "y1";
     }
 
     // console.log(constraintsArray);
     // console.log(objective);
-
+    debugger;
     let input = {
       type: "maximize",
       objective: objective,
@@ -258,21 +272,22 @@ export class Task2Service {
 
     let varsInResp2 = [];
     let objective2 = null;
-    for (let i = 0, lengthInner = data.length; i < lengthInner; i++) {
+    for (let i = 0, lengthInner = data[0].length; i < lengthInner; i++) {
       varsInResp2.push("x" + (i + 1));
       objective2 = objective2 ? objective2 + " + " + "x" + (i + 1) : "x1";
     }
 
     // console.log(constraintsArray2);
     // console.log(objective2);
-
+    debugger;
     let input2 = {
       type: "minimize",
-      objective: "x1 + x2",
+      objective: objective2,
       constraints: constraintsArray2
     };
 
     let output2 = YASMIJ.solve(input2);
+    alert(output2);
     // console.log(JSON.stringify(output2, null, 2));
     // console.log(output2);
     // console.log(varsInResp2);

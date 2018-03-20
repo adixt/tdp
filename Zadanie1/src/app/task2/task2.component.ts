@@ -12,11 +12,11 @@ export class Task2Component {
   }
 
   public get answerA() {
-    return JSON.stringify(this.task2Service.answerA);
+    return JSON.stringify(this.task2Service.answerA, null, 2);
   }
 
   public get answerB() {
-    return JSON.stringify(this.task2Service.answerB);
+    return JSON.stringify(this.task2Service.answerB, null, 2);
   }
 
   public get winSizeA() {
