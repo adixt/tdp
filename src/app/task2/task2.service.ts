@@ -3,17 +3,17 @@ import * as YASMIJ from 'yasmij';
 
 @Injectable()
 export class Task2Service {
-  // private data: Array<number[]> = [
-  //   [-4, 6, 6],
-  //   [8, 3, 3],
-  //   [-5, 4, 5]
-  // ];
-
   private data: Array<number[]> = [
-    [0.2 , 0.3, 0.3],
-    [0.5, 0.1, 0],
-    [0.1, 0.2, 0.3]
+    [-4, 6, 6],
+    [8, 3, 3],
+    [-5, 4, 5]
   ];
+
+  // private data: Array<number[]> = [
+  //   [0.2 , 0.3, 0.3],
+  //   [0.5, 0.1, 0],
+  //   [0.1, 0.2, 0.3]
+  // ];
 
 
   // private data: Array<number[]> = [
@@ -45,11 +45,15 @@ export class Task2Service {
   public set setData(data: Array<number[]>) {
     if (data && data.length > 0 && data[0].length > 0) {
       this.data = data;
+      this.answerA = null;
+      this.answerB = null;
+      this.winSizeA = null;
+      this.winSizeB = null;
     }
   }
 
-  public answerA = {};
-  public answerB = {};
+  public answerA: {} = null;
+  public answerB: {} = null;
   public winSizeA: number;
   public winSizeB: number;
 

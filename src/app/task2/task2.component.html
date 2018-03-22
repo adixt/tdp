@@ -1,6 +1,3 @@
-<p>
-  task2 works!
-</p>
 <table class="table table-striped">
   <tbody>
   <ng-container *ngFor="let array of data; let i = index">
@@ -20,7 +17,9 @@
 
   <input #myInput type="file" (change)="changeListener($event)"/>
 
-  <div *ngIf="true" id="answerDiv"
+  <br><br>
+
+  <div *ngIf="isAnswerVisible" id="answerDiv"
        class="col-12 col-sm-6">
     PLAYER A: {{answerA}} <br>
     Win Size: {{winSizeA}}<br><br>

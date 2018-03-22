@@ -9,6 +9,11 @@ import {CsvService} from '../csv.service';
   styleUrls: ['./task2.component.css']
 })
 export class Task2Component {
+  public get isAnswerVisible() {
+    return this.task2Service.answerA != null ;
+  }
+
+
   @ViewChild('myInput') myInputVariable: any;
 
   public get data(): Array<number[]> {
