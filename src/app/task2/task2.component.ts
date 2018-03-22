@@ -10,7 +10,7 @@ import {CsvService} from '../csv.service';
 })
 export class Task2Component {
   public get isAnswerVisible() {
-    return this.task2Service.answerA != null ;
+    return this.task2Service.answerA != null;
   }
 
 
@@ -37,6 +37,10 @@ export class Task2Component {
   }
 
   constructor(private task2Service: Task2Service, private csvService: CsvService) {
+  }
+
+  public clickInput() {
+    this.myInputVariable.nativeElement.click();
   }
 
   public changeListener(event) {

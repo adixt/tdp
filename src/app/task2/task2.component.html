@@ -1,30 +1,37 @@
-<table class="table table-striped">
-  <tbody>
-  <ng-container *ngFor="let array of data; let i = index">
-    <tr>
-      <ng-container *ngFor="let number of array">
-        <td>{{number}}</td>
-      </ng-container>
-    </tr>
-  </ng-container>
-  </tbody>
-</table>
-<div class="row">
-  <div class="col-12 col-sm-6">
-    <button mat-raised-button color="primary"
-            (click)="resolve()">Resolve</button>
+<div style="padding: 0 10vw 100px">
+  <table class="table table-striped">
+    <tbody>
+    <ng-container *ngFor="let array of data; let i = index">
+      <tr>
+        <ng-container *ngFor="let number of array">
+          <td>{{number}}</td>
+        </ng-container>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-12 col-sm-6">
+      <button  mat-raised-button color="primary"
+              (click)="resolve()">Resolve
+      </button>
+    </div>
+    <div class="col-12 col-sm-6">
+      <input #myInput type="file" style="display: none" (change)="changeListener($event)"/>
+      <button mat-raised-button color="warn"
+              (click)="clickInput()">Choose file
+      </button>
+    </div>
   </div>
 
-  <input #myInput type="file" (change)="changeListener($event)"/>
+    <div class="row" style="padding: 1vh 0">
+    <div *ngIf="isAnswerVisible" id="answerDiv"
+         class="col-12 col-sm-6">
+      PLAYER A: {{answerA}} <br>
+      Win Size: {{winSizeA}}<br><br>
 
-  <br><br>
-
-  <div *ngIf="isAnswerVisible" id="answerDiv"
-       class="col-12 col-sm-6">
-    PLAYER A: {{answerA}} <br>
-    Win Size: {{winSizeA}}<br><br>
-
-    PLAYER B: {{answerB}}<br>
-    Win Size: {{winSizeB}}
+      PLAYER B: {{answerB}}<br>
+      Win Size: {{winSizeB}}
+    </div>
   </div>
 </div>
